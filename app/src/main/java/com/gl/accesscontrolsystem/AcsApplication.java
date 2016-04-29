@@ -40,6 +40,7 @@ public class AcsApplication extends Application {
         GsonBuilder gsonBuilder = new GsonBuilder();
         mGson = gsonBuilder.create();
 
+        
     }
 
     @Override
@@ -68,6 +69,14 @@ public class AcsApplication extends Application {
 
     public void setmUrl(String mUrl) {
         this.mUrl = mUrl;
+    }
+
+    public static Gson getmGson() {
+        return mGson;
+    }
+
+    public static void setmGson(Gson mGson) {
+        AcsApplication.mGson = mGson;
     }
 
     /*!--
@@ -109,6 +118,8 @@ public class AcsApplication extends Application {
             }
         });
     }
+
+
 
     public void  getPersonTimes(String name){
 
