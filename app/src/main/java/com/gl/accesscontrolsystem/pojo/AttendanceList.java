@@ -19,7 +19,7 @@ public class AttendanceList {
         Calendar cal = Calendar.getInstance();
         for(Attendance att:result.attendances){
             if(att.is_arrival) {
-                cal.setTimeInMillis(att.timestamp);
+                cal.setTimeInMillis(att.timestamp*1000);
                 System.out.println(cal.getTime());
                 if (cal.get(Calendar.YEAR) == c.get(Calendar.YEAR) && cal.get(Calendar.DATE) == c.get(Calendar.DATE) && cal.get(Calendar.MONTH) == c.get(Calendar.MONTH)) {
                     return true;

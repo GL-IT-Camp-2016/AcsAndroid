@@ -1,8 +1,10 @@
 package com.gl.accesscontrolsystem;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -11,10 +13,15 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -23,6 +30,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.gl.accesscontrolsystem.pojo.AttendanceList;
 import com.gl.accesscontrolsystem.pojo.Attendances;
+import com.gl.accesscontrolsystem.pojo.PersonList;
 import com.gl.accesscontrolsystem.pojo.PostResult;
 import com.gl.accesscontrolsystem.requests.FormBodyPostRequest;
 import com.gl.accesscontrolsystem.requests.JsonObjectPostRequest;
@@ -40,6 +48,8 @@ import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -54,7 +64,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     List<Geofence> geofences;
     PendingIntent geopendintent;
     GoogleApiClient gac;
-
+    TextView datetextview;
+    DateFormat df;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -63,8 +74,20 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        df = new SimpleDateFormat("dd.MM.yyyy");
         arrivalChkbx = (CheckBox) findViewById(R.id.arrivalCheckBox);
         departureChkbx = (CheckBox) findViewById(R.id.departureCheckBox);
+        datetextview = (TextView) findViewById(R.id.dateTextView);
+        datetextview.setText(df.format(Calendar.getInstance().getTime()));
+        AcsApplication.getInstance().simpleRequest(EndPoints.ATTENDANCE_LIST + "?person_name=" + "Zuzana", Request.Method.GET, new Response.Listener() {
+            @Override
+            public void onResponse(Object response) {
+
+                AttendanceList attendances = AcsApplication.getmGson().fromJson((String) response, AttendanceList.class);
+                arrivalChkbx.setChecked(attendances.getArrivalForDateSelected(Calendar.getInstance()));
+                departureChkbx.setChecked(attendances.getDepartureForDateSelected(Calendar.getInstance()));
+            }
+        });
         gac = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */,
                 this /* OnConnectionFailedListener */)
@@ -136,6 +159,54 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         mDatePicker.show();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.admin:
+                showAdminDialog();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void showAdminDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Title");
+
+// Set up the input
+        final EditText input = new EditText(this);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        builder.setView(input);
+
+// Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(input.getText().equals("1234")){
+                    Intent intent = new Intent(this, PersonListActivity.class);
+
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
 
     public void onArrivalClick(View view) {
         Map<String,String> headers = new HashMap<>();

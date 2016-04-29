@@ -32,7 +32,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="79dp"
         android:checked="false"
-        android:enabled="false"/>
+        android:clickable="false"/>
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -43,26 +43,26 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:checked="false"
-        android:enabled="false"/>
+        android:clickable="false"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Prichod"
-        android:id="@+id/arrivalButton"
-        android:layout_below="@+id/departureCheckBox"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:onClick="onArrivalClick"/>
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Prichod"-->
+        <!--android:id="@+id/arrivalButton"-->
+        <!--android:layout_below="@+id/departureCheckBox"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:onClick="onArrivalClick"/>-->
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Odchod"
-        android:id="@+id/departureButton"
-        android:layout_below="@+id/arrivalButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:onClick="onDepartureClick"/>
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Odchod"-->
+        <!--android:id="@+id/departureButton"-->
+        <!--android:layout_below="@+id/arrivalButton"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:onClick="onDepartureClick"/>-->
 
 </RelativeLayout>
