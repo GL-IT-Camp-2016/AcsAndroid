@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.gl.accesscontrolsystem.pojo.Attendances;
 import com.gl.accesscontrolsystem.pojo.PersonList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -34,8 +35,6 @@ public class AcsApplication extends Application {
 
         GsonBuilder gsonBuilder = new GsonBuilder();
         mGson = gsonBuilder.create();
-
-
 
     }
 
@@ -82,14 +81,25 @@ public class AcsApplication extends Application {
      */
     public void  getPersons(){
 
-        simpleRequest("person/list/", Request.Method.GET, new Response.Listener() {
+        simpleRequest(EndPoints.PERSON_LIST, Request.Method.GET, new Response.Listener() {
             @Override
             public void onResponse(Object response) {
                 String users = (String) response;
                 PersonList list = mGson.fromJson(users, PersonList.class);
             }
         });
+    }
 
+    public void  getPersonTimes(String name){
+
+        simpleRequest(EndPoints.ATTENDANCE_LIST + "?person_name=" + name, Request.Method.GET, new Response.Listener() {
+            @Override
+            public void onResponse(Object response) {
+
+                Attendances attendances = mGson.fromJson((String) response, Attendances.class);
+
+            }
+        });
     }
 
 /*
