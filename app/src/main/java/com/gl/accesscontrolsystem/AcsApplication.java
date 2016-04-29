@@ -36,6 +36,7 @@ public class AcsApplication extends Application {
         GsonBuilder gsonBuilder = new GsonBuilder();
         mGson = gsonBuilder.create();
 
+        
     }
 
     @Override

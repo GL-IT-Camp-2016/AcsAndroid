@@ -62,6 +62,7 @@
         android:id="@+id/departureButton"
         android:layout_below="@+id/arrivalButton"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:onClick="onDepartureClick"/>
 
 </RelativeLayout>
