@@ -67,7 +67,71 @@ public class AcsApplication extends Application {
                 });
 
         mQueue.add(stringRequest);
-
-
     }
+
+/*
+    GET person
+    list:
+
+    http://itc16.herokuapp.com/person/list/
+
+    result:
+
+    {
+        "result":{
+        "persons":[
+        {
+            "name":"aaa"
+        }
+        ]
+    },
+        "success":true
+    }
+
+
+    GET attendance list:
+    http://itc16.herokuapp.com/attendance/list/?person_name=aaa
+
+    {
+        "result":{
+        "attendances":[
+        {
+            "is_arrival":true,
+                "timestamp":2165456
+        },
+        {
+            "is_arrival":false,
+                "timestamp":2165499
+        }
+        ]
+    },
+        "success":true
+    }
+
+    POST arrival
+    http://itc16.herokuapp.com/attendance/store/arrival/
+
+    form params    :
+    person_name
+    timestamp
+
+    result:
+
+    {
+        "success":true
+    }
+
+    DEPARTURE:
+    POST http://itc16.herokuapp.com/attendance/store/departure/
+
+    form params    :
+    person_name
+    timestamp
+    result
+
+    {
+        "success":true
+    }
+*/
+
 }
