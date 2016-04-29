@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.SyncStateContract;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -56,7 +57,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status> {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status> {
 
     FormBodyPostRequest arrdep;
     CheckBox arrivalChkbx;
@@ -89,12 +90,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
         gac = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */,
-                this /* OnConnectionFailedListener */)
-                .addApi(Drive.API)
-                .addScope(Drive.SCOPE_FILE)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
                 .build();
-        gac.connect();
         geofences = new ArrayList<>();
         geofences.add(new Geofence.Builder()
                 .setRequestId("ABCD")
@@ -107,7 +106,19 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
                         Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build());
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         gac.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        gac.disconnect();
     }
 
     private GeofencingRequest getGeofencingRequest() {
@@ -121,9 +132,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         if (geopendintent != null) {
             return geopendintent;
         }
-        Intent intent = new Intent(this, MainActivity.class);
-        return PendingIntent.getService(this, 0, intent, PendingIntent.
-                FLAG_UPDATE_CURRENT);
+        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
+        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public void onDateClick(View view) {
@@ -270,10 +280,21 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         System.out.println("####Connection failed####");
+        Log.i(this.getClass().getSimpleName(), "Connection failed: ConnectionResult.getErrorCode() = " + connectionResult.getErrorCode());
     }
 
     @Override
     public void onResult(@NonNull Status status) {
         System.out.println("GeoFenceOnResult");
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Log.i(this.getClass().getSimpleName(), "Connected to GoogleApiClient");
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
     }
 }
