@@ -15,9 +15,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.gl.accesscontrolsystem.pojo.AttendanceList;
 import com.gl.accesscontrolsystem.requests.JsonObjectPostRequest;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.JsonObject;
 
 import java.util.Calendar;
