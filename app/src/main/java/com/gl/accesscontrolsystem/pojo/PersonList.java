@@ -9,5 +9,9 @@ public class PersonList {
 }
 
 class Result {
-    ArrayList<String> persons;
+    ArrayList<Person> persons;
+}
+
+class Person {
+    String name;
 }
