@@ -23,8 +23,12 @@ public class AcsApplication extends Application {
 
     private static AcsApplication sInstance;
     private RequestQueue mQueue;
-    private static Gson mGson;
+    private static Gson mGson ;
     private String mUrl = "http://itc16.herokuapp.com/";
+
+    public Gson getmGson(){
+        return mGson;
+    }
 
     @Override
     public void onCreate() {
@@ -86,6 +90,7 @@ public class AcsApplication extends Application {
             public void onResponse(Object response) {
                 String users = (String) response;
                 PersonList list = mGson.fromJson(users, PersonList.class);
+
             }
         });
     }
