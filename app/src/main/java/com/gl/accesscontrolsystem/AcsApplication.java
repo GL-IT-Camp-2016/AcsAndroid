@@ -45,6 +45,21 @@ public class AcsApplication extends Application {
         return sInstance;
     }
 
+    public RequestQueue getmQueue() {
+        return mQueue;
+    }
+
+    public void setmQueue(RequestQueue mQueue) {
+        this.mQueue = mQueue;
+    }
+
+    public String getmUrl() {
+        return mUrl;
+    }
+
+    public void setmUrl(String mUrl) {
+        this.mUrl = mUrl;
+    }
 
     /*!--
      *   Simple Rest client
