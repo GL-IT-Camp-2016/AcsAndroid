@@ -10,8 +10,10 @@ public class Attendances {
     Result result;
     boolean success;
 
+
+
     public class Result {
-        ArrayList attendances;
+        ArrayList<Attendance> attendances;
 
         public class Attendance {
 
