@@ -202,9 +202,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(input.getText().equals("1234")){
-                    Intent intent = new Intent(this, PersonListActivity.class);
-
+                if(input.getText().toString().equals("1234")){
+                    Intent intent = new Intent(MainActivity.this, PersonListActivity.class);
+                    startActivity(intent);
                 }
             }
         });
