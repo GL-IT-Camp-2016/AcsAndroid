@@ -66,6 +66,14 @@ public class AcsApplication extends Application {
         this.mUrl = mUrl;
     }
 
+    public static Gson getmGson() {
+        return mGson;
+    }
+
+    public static void setmGson(Gson mGson) {
+        AcsApplication.mGson = mGson;
+    }
+
     /*!--
      *   Simple Rest client
      *   http://developer.android.com/training/volley/index.html
@@ -104,6 +112,8 @@ public class AcsApplication extends Application {
             }
         });
     }
+
+
 
     public void  getPersonTimes(String name){
 

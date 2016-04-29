@@ -14,6 +14,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.gl.accesscontrolsystem.pojo.AttendanceList;
+import com.gl.accesscontrolsystem.pojo.Attendances;
+import com.gl.accesscontrolsystem.pojo.PostResult;
 import com.gl.accesscontrolsystem.requests.JsonObjectPostRequest;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -26,7 +28,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    JsonObjectPostRequest<AttendanceList> attendances;
+    JsonObjectPostRequest<PostResult> attendances;
     CheckBox arrivalChkbx;
     CheckBox departureChkbx;
     /**
@@ -69,18 +71,15 @@ public class MainActivity extends AppCompatActivity {
                 cal.set(Calendar.YEAR,selectedyear);
                 cal.set(Calendar.MONTH,selectedmonth);
                 cal.set(Calendar.DATE,selectedday);
-                attendances = new JsonObjectPostRequest<>(AcsApplication.getInstance().getmUrl() + EndPoints.ATTENDANCE_LIST, AttendanceList.class, headers, new Response.Listener<AttendanceList>() {
+                AcsApplication.getInstance().simpleRequest(EndPoints.ATTENDANCE_LIST + "?person_name=" + "aaa", Request.Method.GET, new Response.Listener() {
                     @Override
-                    public void onResponse(AttendanceList response) {
-                        arrivalChkbx.setChecked(response.getArrivalForDateSelected(cal));
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e(this.getClass().getSimpleName(), "REST error: " + error.getMessage());
+                    public void onResponse(Object response) {
+
+                        AttendanceList attendances = AcsApplication.getmGson().fromJson((String) response, AttendanceList.class);
+                        arrivalChkbx.setChecked(attendances.getArrivalForDateSelected(cal));
+                        departureChkbx.setChecked(attendances.getDepartureForDateSelected(cal));
                     }
                 });
-                AcsApplication.getInstance().getmQueue().add(attendances);
             }
         }, mYear, mMonth, mDay);
         mDatePicker.setTitle("Select date");
@@ -88,5 +87,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void onArrivalClick(View view) {
+            Map<String,String> headers = new HashMap<>();
+            headers.put("person_name","aaa");
+            headers.put("timestamp", String.valueOf((Calendar.getInstance().getTimeInMillis()/1000)));
+           attendances = new JsonObjectPostRequest<>(AcsApplication.getInstance().getmUrl()+EndPoints.ATTENDANCE_ARRIVAL, PostResult.class,headers,
+                   new Response.Listener<PostResult>(){
 
+                       @Override
+                       public void onResponse(PostResult response) {
+                           System.out.println(response.isResult());
+                       }
+                   },new Response.ErrorListener() {
+               @Override
+               public void onErrorResponse(VolleyError error) {
+                   Log.e(this.getClass().getSimpleName(), "REST error: " + error.getMessage());
+               }
+           });
+        AcsApplication.getInstance().getmQueue().add(attendances);
+    }
 }
