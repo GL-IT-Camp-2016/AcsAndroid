@@ -25,6 +25,7 @@ public class AcsApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        sInstance = this;
 
         mQueue = Volley.newRequestQueue(this);
 
